@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.setGlobalPrefix("nft-adv");
+
   const config = new DocumentBuilder()
     .setTitle("none")
     .setVersion("1.0")
