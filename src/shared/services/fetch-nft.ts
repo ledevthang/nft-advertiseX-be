@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 type FetchNftParams = {
   tokenAddress: string;
@@ -20,14 +20,14 @@ type NftResponse = {
 export const fetchNft = ({
   tokenAddress,
   tokenId,
-  chain = 'ethereum',
+  chain = "ethereum",
 }: FetchNftParams) =>
   axios
     .get<NftResponse>(
       `https://api.opensea.io/api/v2/chain/${chain}/contract/${tokenAddress}/nfts/${tokenId}`,
       {
         headers: {
-          'x-api-key': 'a4a7a4419218412f878d0b2b9112cc3c',
+          "x-api-key": "a4a7a4419218412f878d0b2b9112cc3c",
         },
       },
     )

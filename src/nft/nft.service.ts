@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@root/prisma/prisma.service';
-import { CreateNftPayload } from './parsers/create-nft';
-import { fetchNft } from '@root/shared/services/fetch-nft';
-import { DateTime } from 'luxon';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "@root/prisma/prisma.service";
+import { CreateNftPayload } from "./parsers/create-nft";
+import { fetchNft } from "@root/shared/services/fetch-nft";
+import { DateTime } from "luxon";
+import { ParseNftQuery } from "./parsers/parse-nft";
 
 @Injectable()
 export class NftService {
@@ -33,6 +34,14 @@ export class NftService {
     });
   }
 
+  async parseNft({ chain, tokenAddress, tokenId }: ParseNftQuery) {
+    return fetchNft({
+      tokenAddress,
+      tokenId,
+      chain,
+    });
+  }
+
   async activeNft(id: number, amount: number) {
     const nft = await this.prisma.nft.findUnique({
       where: {
@@ -41,7 +50,7 @@ export class NftService {
     });
 
     if (!nft) {
-      throw new Error('not found nft when active');
+      throw new Error("not found nft when active");
     }
 
     const squarePrice = amount / nft.duration;

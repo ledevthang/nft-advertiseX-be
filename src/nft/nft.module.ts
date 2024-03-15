@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { PrismaService } from '@root/prisma/prisma.service';
-import { NftController } from './nft.controller';
-import { NftService } from './nft.service';
+import { Module } from "@nestjs/common";
+import { PrismaService } from "@root/prisma/prisma.service";
+import { NftController } from "./nft.controller";
+import { NftService } from "./nft.service";
 
 @Module({
   controllers: [NftController],

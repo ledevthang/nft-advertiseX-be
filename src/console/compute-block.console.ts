@@ -1,7 +1,7 @@
-import { CommandRunner, Command } from 'nest-commander';
+import { Command, CommandRunner } from "nest-commander";
 
 @Command({
-  name: 'compute-block',
+  name: "compute-block",
 })
 export class BlockConsole extends CommandRunner {
   constructor() {

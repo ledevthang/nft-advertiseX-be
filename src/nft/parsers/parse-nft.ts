@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateNftPayload {
+export class ParseNftQuery {
   @ApiProperty()
   tokenAddress: string;
 
@@ -9,7 +9,4 @@ export class CreateNftPayload {
 
   @ApiProperty()
   chain: string;
-
-  @ApiProperty()
-  duration: number;
 }

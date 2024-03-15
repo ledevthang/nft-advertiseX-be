@@ -1,7 +1,7 @@
-import { CommandRunner, Command } from 'nest-commander';
+import { CommandRunner, Command } from "nest-commander";
 
 @Command({
-  name: 'listen-stream',
+  name: "listen-stream",
 })
 export class StreamConsole extends CommandRunner {
   constructor() {
