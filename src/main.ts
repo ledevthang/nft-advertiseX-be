@@ -7,6 +7,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix("nft-adv");
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle("none")
     .setVersion("1.0")
