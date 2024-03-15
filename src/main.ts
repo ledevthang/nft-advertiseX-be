@@ -13,7 +13,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  SwaggerModule.setup("nft-adv/docs", app, document);
 
   await app.listen(8000);
 }
