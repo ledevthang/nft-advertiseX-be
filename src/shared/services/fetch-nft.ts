@@ -11,6 +11,7 @@ type NftResponse = {
     identifier: string;
     contract: string;
     image_url: string;
+    name: string;
     description?: string;
     animation_url?: string;
     opensea_url?: string;

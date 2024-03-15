@@ -6,7 +6,4 @@ export class ParseNftQuery {
 
   @ApiProperty()
   tokenId: string;
-
-  @ApiProperty()
-  chain: string;
 }

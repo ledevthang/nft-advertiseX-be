@@ -34,12 +34,23 @@ export class NftService {
     });
   }
 
-  async parseNft({ chain, tokenAddress, tokenId }: ParseNftQuery) {
-    return fetchNft({
+  async parseNft({ tokenAddress, tokenId }: ParseNftQuery) {
+    const nft = await fetchNft({
       tokenAddress,
       tokenId,
-      chain,
     });
+
+    return {
+      id: nft.identifier,
+      nftName: nft.name,
+      chain: "ethereum",
+      tokenId: nft.identifier,
+      tokenAddress: nft.contract,
+      imageUrl: nft.image_url,
+      price: undefined,
+      isActive: false,
+      marketplace: "opensea",
+    };
   }
 
   async activeNft(id: number, amount: number) {
