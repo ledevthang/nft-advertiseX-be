@@ -42,6 +42,9 @@ export class NftController {
     return this.nftService.activeNft(body);
   }
 
+  @Get("me")
+  getMyNfts() {}
+
   @Post()
   createNft(@Body() body: CreateNftPayload) {
     return this.nftService.createNft(body);

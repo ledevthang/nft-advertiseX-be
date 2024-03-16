@@ -8,6 +8,7 @@ import { EstimateNftQuery } from "./parsers/estimate-nft";
 import { positionMap } from "@root/shared/helpers/calculate-position";
 import { SearchNftsQuery } from "./parsers/search-nft";
 import { ActiveNftPayload } from "./parsers/active-nft";
+import { createPayment } from "@root/contract/payment";
 
 @Injectable()
 export class NftService {
@@ -59,6 +60,8 @@ export class NftService {
   }
 
   async activeNft({ amount, id }: ActiveNftPayload) {
+    await createPayment(amount);
+
     const nft = await this.prisma.nft.findUnique({
       where: {
         id,
@@ -175,6 +178,34 @@ export class NftService {
       pageNumber: pageNumber,
       pageSize: pageSize,
       total: total,
+    };
+  }
+
+  async getMeNfts() {
+    const nfts = await this.prisma.nft.findMany({
+      orderBy: {
+        id: "desc",
+      },
+    });
+
+    const nftsMapped = nfts.map((nft) => ({
+      nftName: nft.name,
+      chain: "ethereum",
+      marketplace: "opensea",
+      tokenId: nft.token_id,
+      tokenAddress: nft.token_address,
+      originalUrl: nft.opensea_url,
+      position: nft.position,
+      squarePrice: nft.square_price,
+      isActive: nft.is_active,
+      imageUrl: nft.image_url,
+    }));
+
+    return {
+      data: nftsMapped,
+      pageNumber: 1000,
+      pageSize: 1,
+      total: 900,
     };
   }
 }
