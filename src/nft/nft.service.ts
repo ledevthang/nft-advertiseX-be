@@ -100,11 +100,9 @@ export class NftService {
         },
       });
 
-      console.log("ma: ", matchedNft);
-
       return {
         avgTime: 0,
-        squarePrice: matchedNft?.square_price || 0.1,
+        squarePrice: matchedNft?.square_price || squarePrice,
         blockNumber:
           positionMap?.[matchedNft?.position || 1001]?.blockNumber || 12,
         postionOnCategories: [
@@ -126,7 +124,7 @@ export class NftService {
 
       return {
         avgTime: 0,
-        squarePrice: matchedNft?.square_price || 0.1,
+        squarePrice: matchedNft?.square_price || squarePrice,
         blockNumber:
           positionMap?.[matchedNft?.position || 1001]?.blockNumber || 12,
         postionOnCategories: [
