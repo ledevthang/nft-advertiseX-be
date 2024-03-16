@@ -7,6 +7,7 @@ import { ParseNftQuery } from "./parsers/parse-nft";
 import { EstimateNftQuery } from "./parsers/estimate-nft";
 import { positionMap } from "@root/shared/helpers/calculate-position";
 import { SearchNftsQuery } from "./parsers/search-nft";
+import { ActiveNftPayload } from "./parsers/active-nft";
 
 @Injectable()
 export class NftService {
@@ -57,7 +58,7 @@ export class NftService {
     };
   }
 
-  async activeNft(id: number, amount: number) {
+  async activeNft({ amount, id }: ActiveNftPayload) {
     const nft = await this.prisma.nft.findUnique({
       where: {
         id,
