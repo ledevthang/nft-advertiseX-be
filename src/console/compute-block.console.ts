@@ -99,7 +99,7 @@ export class BlockConsole extends CommandRunner {
 
     await Promise.all(
       outputBuffers.map(async (outputBuffer, idx) => {
-        sharp(outputBuffer).toFile(`block_${idx}.png`);
+        sharp(outputBuffer).toFile(`public/block_${idx + 1}.png`);
       }),
     );
   }

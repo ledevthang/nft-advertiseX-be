@@ -4,6 +4,8 @@ import { CreateNftPayload } from "./parsers/create-nft";
 import { fetchNft } from "@root/shared/services/fetch-nft";
 import { DateTime } from "luxon";
 import { ParseNftQuery } from "./parsers/parse-nft";
+import { EstimateNftQuery } from "./parsers/estimate-nft";
+import { positionMap } from "@root/shared/helpers/calculate-position";
 
 @Injectable()
 export class NftService {
@@ -78,4 +80,68 @@ export class NftService {
       },
     });
   }
+
+  async estimateNft({ position, squarePrice }: EstimateNftQuery) {
+    if (squarePrice) {
+      const matchedNft = await this.prisma.nft.findFirst({
+        orderBy: [
+          {
+            square_price: "desc",
+          },
+          {
+            id: "desc",
+          },
+        ],
+        where: {
+          square_price: {
+            lte: squarePrice,
+          },
+          is_active: true,
+        },
+      });
+
+      console.log("ma: ", matchedNft);
+
+      return {
+        avgTime: 0,
+        squarePrice: matchedNft?.square_price || 0.1,
+        blockNumber:
+          positionMap?.[matchedNft?.position || 1001]?.blockNumber || 12,
+        postionOnCategories: [
+          {
+            name: "NFT",
+            position:
+              matchedNft?.position ||
+              (await this.prisma.nft.count({ where: { is_active: true } })) + 1,
+          },
+        ],
+      };
+    } else {
+      const matchedNft = await this.prisma.nft.findFirst({
+        where: {
+          is_active: true,
+          position,
+        },
+      });
+
+      return {
+        avgTime: 0,
+        squarePrice: matchedNft?.square_price || 0.1,
+        blockNumber:
+          positionMap?.[matchedNft?.position || 1001]?.blockNumber || 12,
+        postionOnCategories: [
+          {
+            name: "NFT",
+            position: matchedNft?.position || position,
+          },
+        ],
+      };
+    }
+  }
+
+  //         avgTime: Number(avgTime) / 3600,
+  //         squarePrice: matchedNft.squarePrice,
+  //         positionWithinBlock: matchedNft.positionWithinBlock,
+  //         blockNumber: matchedNft.blockNumber,
+  //         postionOnCategories,
 }
