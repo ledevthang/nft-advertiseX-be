@@ -25,7 +25,7 @@ export class NftService {
       chain,
     });
 
-    await this.prisma.nft.create({
+    return this.prisma.nft.create({
       data: {
         token_address: tokenAddress,
         token_id: tokenId,
