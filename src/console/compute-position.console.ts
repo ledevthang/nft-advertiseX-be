@@ -23,7 +23,7 @@ export class PositionConsole extends CommandRunner implements OnModuleInit {
     await client.query("LISTEN nfts_change");
 
     client.on("notification", async () => {
-      await this.prisma.$executeRaw`
+      await client.query(`
         WITH nft_ext AS (
         SELECT
         "nft"."id",
@@ -42,7 +42,9 @@ export class PositionConsole extends CommandRunner implements OnModuleInit {
           LIMIT 1
         )
       WHERE is_active = true
-          `;
+          `);
+
+      console.log("done");
     });
 
     console.log("listening nfts");
@@ -68,8 +70,7 @@ export class PositionConsole extends CommandRunner implements OnModuleInit {
             AFTER 
                 INSERT 
                 OR DELETE 
-                OR UPDATE 
-                --OF square_price, is_active
+                OR UPDATE OF square_price, is_active
             ON nft
             FOR EACH ROW 
             EXECUTE PROCEDURE nfts_change_listener();
