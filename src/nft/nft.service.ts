@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { ParseNftQuery } from "./parsers/parse-nft";
 import { EstimateNftQuery } from "./parsers/estimate-nft";
 import { positionMap } from "@root/shared/helpers/calculate-position";
+import { SearchNftsQuery } from "./parsers/search-nft";
 
 @Injectable()
 export class NftService {
@@ -32,6 +33,7 @@ export class NftService {
         animation_url: nft.animation_url,
         description: nft.description,
         duration,
+        name: nft.name,
       },
     });
   }
@@ -137,9 +139,41 @@ export class NftService {
     }
   }
 
-  //         avgTime: Number(avgTime) / 3600,
-  //         squarePrice: matchedNft.squarePrice,
-  //         positionWithinBlock: matchedNft.positionWithinBlock,
-  //         blockNumber: matchedNft.blockNumber,
-  //         postionOnCategories,
+  async search({ pageNumber, pageSize }: SearchNftsQuery) {
+    let [nfts, total] = await Promise.all([
+      this.prisma.nft.findMany({
+        orderBy: {
+          position: "desc",
+        },
+        where: {
+          is_active: true,
+        },
+      }),
+      this.prisma.nft.count({
+        where: {
+          is_active: true,
+        },
+      }),
+    ]);
+
+    const nftsMapped = nfts.map((nft) => ({
+      nftName: nft.name,
+      chain: "ethereum",
+      marketplace: "opensea",
+      tokenId: nft.token_id,
+      tokenAddress: nft.token_address,
+      originalUrl: nft.opensea_url,
+      position: nft.position,
+      squarePrice: nft.square_price,
+      isActive: nft.is_active,
+      imageUrl: nft.image_url,
+    }));
+
+    return {
+      data: nftsMapped,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      total: total,
+    };
+  }
 }
