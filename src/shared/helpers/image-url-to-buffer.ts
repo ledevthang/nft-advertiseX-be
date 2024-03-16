@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export const imageUrlToBuffer = async (imageUrl: string) => {
+  console.log("imageUrl: ", imageUrl);
+
   const response = await axios({
     url: imageUrl,
     method: "GET",
@@ -8,6 +10,8 @@ export const imageUrlToBuffer = async (imageUrl: string) => {
   });
 
   const buffer = Buffer.from(response.data, "binary");
+
+  console.log("buffer: ", buffer);
 
   return buffer;
 };

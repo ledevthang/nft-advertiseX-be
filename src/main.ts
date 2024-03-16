@@ -10,7 +10,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix("nft-adv");
 
-  // app.use("/nft-adv/static", express.static(join(__dirname, "..", "public")));
+  app.use("/nft-adv/static", express.static(join(__dirname, "..", "public")));
 
   app.enableCors();
 

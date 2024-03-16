@@ -60,7 +60,7 @@ export class NftService {
   }
 
   async activeNft({ amount, id }: ActiveNftPayload) {
-    await createPayment(amount);
+    const result = await createPayment(amount);
 
     const nft = await this.prisma.nft.findUnique({
       where: {
@@ -85,6 +85,10 @@ export class NftService {
         payment_date: DateTime.now().toJSDate(),
       },
     });
+
+    return {
+      hash: result.hash,
+    };
   }
 
   async estimateNft({ position, squarePrice }: EstimateNftQuery) {
@@ -147,15 +151,21 @@ export class NftService {
     let [nfts, total] = await Promise.all([
       this.prisma.nft.findMany({
         orderBy: {
-          position: "desc",
+          position: "asc",
         },
         where: {
           is_active: true,
+          position: {
+            gt: 0,
+          },
         },
       }),
       this.prisma.nft.count({
         where: {
           is_active: true,
+          position: {
+            gt: 0,
+          },
         },
       }),
     ]);
@@ -175,9 +185,9 @@ export class NftService {
 
     return {
       data: nftsMapped,
-      pageNumber: pageNumber,
-      pageSize: pageSize,
-      total: total,
+      pageNumber: 1,
+      pageSize: 1000,
+      total: 10,
     };
   }
 
